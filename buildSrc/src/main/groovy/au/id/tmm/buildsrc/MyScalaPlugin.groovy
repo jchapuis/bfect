@@ -4,6 +4,8 @@ import com.github.maiflai.ScalaTestPlugin
 import com.hierynomus.gradle.license.LicenseBasePlugin
 import com.hierynomus.gradle.license.tasks.LicenseCheck
 import com.hierynomus.gradle.license.tasks.LicenseFormat
+import cz.alenkacz.gradle.scalafmt.PluginExtension
+import cz.alenkacz.gradle.scalafmt.ScalafmtPlugin
 import nl.javadude.gradle.plugins.license.LicenseExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -103,6 +105,7 @@ class MyScalaPlugin implements Plugin<Project> {
         }
 
         applyLicensePlugin(target)
+        applyScalaFmtPlugin(target)
     }
 
     private void applyScoverage(Project target) {
@@ -150,6 +153,13 @@ class MyScalaPlugin implements Plugin<Project> {
 
         def updateLicensesTask = target.tasks.create(name: 'updateLicenses', group: 'verification')
         target.tasks.withType(LicenseFormat.class).each { updateLicensesTask.dependsOn(it) }
+    }
 
+    private static void applyScalaFmtPlugin(Project target) {
+        target.plugins.apply(ScalafmtPlugin.class)
+
+        def extension = target.extensions.getByName('scalafmt') as PluginExtension
+
+        extension.configFilePath = target.rootProject.file('.scalafmt.conf')
     }
 }
