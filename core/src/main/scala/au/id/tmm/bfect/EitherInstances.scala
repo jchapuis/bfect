@@ -1,18 +1,18 @@
 /**
- *    Copyright 2019 Timothy McCarthy
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
+  *    Copyright 2019 Timothy McCarthy
+  *
+  *    Licensed under the Apache License, Version 2.0 (the "License");
+  *    you may not use this file except in compliance with the License.
+  *    You may obtain a copy of the License at
+  *
+  *        http://www.apache.org/licenses/LICENSE-2.0
+  *
+  *    Unless required by applicable law or agreed to in writing, software
+  *    distributed under the License is distributed on an "AS IS" BASIS,
+  *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  *    See the License for the specific language governing permissions and
+  *    limitations under the License.
+  */
 package au.id.tmm.bfect
 
 import scala.annotation.tailrec
@@ -38,15 +38,15 @@ private object EitherInstanceImpls {
     @tailrec
     override final def tailRecM[E, A, A1](a: A)(f: A => Either[E, Either[A, A1]]): Either[E, A1] = f(a) match {
       case Right(Right(a)) => rightPure(a)
-      case Right(Left(e)) => tailRecM(e)(f)
-      case Left(e) => Left(e)
+      case Right(Left(e))  => tailRecM(e)(f)
+      case Left(e)         => Left(e)
     }
   }
 
-  class BMEInstance private[bfect]() extends BifunctorMonadInstance with BifunctorMonadError[Either] {
+  class BMEInstance private[bfect] () extends BifunctorMonadInstance with BifunctorMonadError[Either] {
     override def handleErrorWith[E1, A, E2](fea: Either[E1, A])(f: E1 => Either[E2, A]): Either[E2, A] = fea match {
       case Right(a) => Right(a)
-      case Left(e) => f(e)
+      case Left(e)  => f(e)
     }
   }
 
@@ -65,4 +65,3 @@ trait HighPriorityEitherInstances extends MiddlePriorityEitherInstances {
 }
 
 object EitherInstances extends HighPriorityEitherInstances
-
